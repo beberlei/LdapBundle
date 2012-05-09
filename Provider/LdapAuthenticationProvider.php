@@ -42,11 +42,15 @@ class LdapAuthenticationProvider implements AuthenticationProviderInterface
  
   private function bind(UserInterface $user, TokenInterface $token)
   {
-    return (bool)
-      $this->ldapManager
-      ->setUsername($user->getUsername())
-      ->setPassword($token->getCredentials())
-      ->auth();
+      try {
+          return (bool)
+              $this->ldapManager
+              ->setUsername($user->getUsername())
+              ->setPassword($token->getCredentials())
+              ->auth();
+      } catch(\Exception $e) {
+          return false;
+      }
   }
   
   public function supports(TokenInterface $token)
